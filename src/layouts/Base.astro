@@ -1,0 +1,36 @@
+---
+import '../styles/global.css';
+import Testata from '../components/Testata.astro';
+import Chiusura from '../components/Chiusura.astro';
+
+interface Props {
+  titolo: string;
+  descrizione?: string;
+  /* La scheda respira più della lettera: la fotografia è il contenuto. */
+  largo?: boolean;
+}
+
+const { titolo, descrizione, largo = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>{titolo}</title>
+    {descrizione && <meta name="description" content={descrizione} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {/* Le note promettono "nessuna indicizzazione". Finché è vero, sta qui. */}
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body>
+    <div class:list={['pagina', largo && 'largo']}>
+      <Testata />
+      <main>
+        <slot />
+      </main>
+      <Chiusura />
+    </div>
+  </body>
+</html>

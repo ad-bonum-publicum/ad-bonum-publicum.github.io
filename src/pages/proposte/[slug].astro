@@ -1,0 +1,53 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Tavola from '../../components/Tavola.astro';
+
+export async function getStaticPaths() {
+  const proposte = await getCollection('proposte');
+  return proposte.map((proposta) => ({
+    params: { slug: proposta.id },
+    props: { proposta },
+  }));
+}
+
+const { proposta } = Astro.props;
+const { data } = proposta;
+const { Content } = await render(proposta);
+
+/* La riga del colophon: gli stessi campi dell'artifact, la data solo se c'è. */
+const dati = [`Proposta n. ${data.numero}`, data.luogo, data.dataTesto, data.tema].filter(Boolean);
+---
+
+<Base titolo={`${data.titolo} — Proposte per Pisticci`} descrizione={data.occhiello} largo>
+  <article>
+    <Tavola
+      immagine={data.immagine}
+      alt={data.alt}
+      larghezza={data.larghezza}
+      altezza={data.altezza}
+      disegnata={data.disegnata}
+      annotazioni={data.annotazioni}
+    />
+
+    <p class="didascalia nota">
+      {data.didascalia.map((riga) => <span>{riga}</span>)}
+    </p>
+
+    <div class="scheda-testo">
+      <h1>{data.titolo}</h1>
+      <p class="occhiello">{data.occhiello}</p>
+      <div class="corpo-testo">
+        <Content />
+      </div>
+    </div>
+
+    <footer class="colophon nota">
+      <p class="dati">{dati.map((voce) => <span>{voce}</span>)}</p>
+      <p>
+        Un&rsquo;idea di Franco Di Benedetto. Non è commissionata, non è approvata da nessuna
+        amministrazione e non è un progetto: è una proposta.
+      </p>
+    </footer>
+  </article>
+</Base>

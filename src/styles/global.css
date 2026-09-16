@@ -1,0 +1,476 @@
+@import './fonts.css';
+
+/* Hallmark · tokens — Proposte per Pisticci
+ * Palette custom: nessun accento cromatico. L'unico colore della pagina sono
+ * le immagini di Franco; la carta è un bianco freddo, non un crema caldo.
+ * axes: paper=light · display=grotesk-sans · accent=neutral
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Colore ---------------------------------------------------------------- */
+  --color-paper:      oklch(97.8% 0.006 250);
+  --color-paper-2:    oklch(95.2% 0.007 250);
+  --color-paper-3:    oklch(91.5% 0.008 250);
+  --color-rule:       oklch(86%   0.008 250);
+  --color-neutral:    oklch(62%   0.009 255);
+  --color-muted:      oklch(46%   0.010 258);
+  --color-ink-2:      oklch(30%   0.008 260);
+  --color-ink:        oklch(19%   0.010 262);
+  --color-accent:     oklch(19%   0.010 262);
+  --color-focus:      oklch(45%   0.070 262);
+
+  /* Carattere ------------------------------------------------------------- */
+  --font-display: 'Archivo', ui-sans-serif, 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    'Source Serif 4', ui-serif, Georgia, 'Times New Roman', serif;
+
+  --display-weight: 620;
+  --tracking-display: -0.021em;
+  --tracking-tight:   -0.011em;
+
+  /* Scala tipografica ----------------------------------------------------- */
+  --text-xs:   0.8125rem;
+  --text-sm:   0.9375rem;
+  --text-base: 1.125rem;
+  --text-md:   1.25rem;
+  --text-lg:   1.5rem;
+  --text-xl:   1.9rem;
+  --text-display:   clamp(2.1rem, 4.4vw + 0.9rem, 3.9rem);
+  --text-display-s: clamp(1.6rem, 2.2vw + 0.8rem, 2.4rem);
+
+  --lh-tight:   1.12;
+  --lh-normal:  1.5;
+  --lh-relaxed: 1.62;
+  --measure:    54ch;
+
+  /* Spazio — scala 4pt ---------------------------------------------------- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs:  0.75rem;
+  --space-sm:  1rem;
+  --space-md:  1.5rem;
+  --space-lg:  2rem;
+  --space-xl:  3rem;
+  --space-2xl: 4.5rem;
+  --space-3xl: 7rem;
+
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+
+  /* Tratto, raggio, movimento --------------------------------------------- */
+  --rule-hair: 1px;
+  --radius-none: 0;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-short: 180ms;
+}
+
+/* Hallmark · genre: editorial
+ * macrostructure: Letter (home) · Photographic (scheda) · Long Document (note)
+ * theme: custom — vibe "lettera civica, bianco e nero, niente studio di architettura"
+ *   paper oklch(97.8% 0.006 250) freddo · accent neutral (nessuna cromia: il colore
+ *   sono le fotografie) · display Archivo 620 · body Source Serif 4 400
+ * axes: paper=light · display=grotesk-sans · accent=neutral
+ * nav: N9 edge-aligned · footer: Ft6 letter-close · enrichment: none
+ * design-system: design.md · designed-as-app
+ * pre-emit critique: P5 H4 E4 S5 R5 V5
+ * contrast: pass (40-41) · slop: pass (42-45) · honest: pass (46) · chrome: pass (47)
+ * tokens: pass (48) · responsive: pass (49) · icons: pass (30) · mobile: pass (34, 50-57)
+ */
+
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { overflow-x: clip; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--lh-relaxed);
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: inherit; text-decoration: none; }
+
+/* L'unico gesto grafico ricorrente: una sottolineatura disegnata, non un filetto. */
+a:not(.nudo) {
+  text-decoration: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.18em;
+  text-decoration-color: var(--color-rule);
+  transition: text-decoration-color var(--dur-short) var(--ease-out);
+}
+a:not(.nudo):hover { text-decoration-color: var(--color-ink); }
+a:active { color: var(--color-ink-2); }
+a[aria-disabled='true'] { color: var(--color-neutral); cursor: not-allowed; text-decoration: none; }
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  overflow-wrap: anywhere;
+  min-width: 0;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--text-display); }
+h2 { font-size: var(--text-display-s); letter-spacing: var(--tracking-tight); }
+
+p { margin: 0 0 var(--space-sm); }
+
+/* Il minuscolo sans che ha sostituito le etichette monospaziate maiuscole.
+   Nessun maiuscoletto, nessuna spaziatura forzata: si legge, non si annuncia. */
+.nota {
+  font-family: var(--font-display);
+  font-weight: 450;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  letter-spacing: 0;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.nota-min { font-size: var(--text-xs); }
+
+/* ── Impianto ─────────────────────────────────────────────────────────────── */
+
+.pagina {
+  max-width: 58rem;
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+/* La scheda respira più della lettera: la fotografia è il contenuto. */
+.pagina.largo { max-width: 76rem; }
+
+.colonna { max-width: var(--measure); }
+
+/* N9 · testata allineata ai bordi: nessun filetto, nessuno sticky, nessun
+   wordmark centrato. Il nome sta al margine, i due link al margine opposto. */
+.testata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs) var(--space-lg);
+  align-items: baseline;
+  justify-content: space-between;
+  padding-block: var(--space-md) var(--space-lg);
+}
+
+.testata .firma {
+  font-family: var(--font-display);
+  font-weight: 560;
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink);
+}
+
+.testata nav { display: flex; gap: var(--space-md); white-space: nowrap; }
+
+/* Ft6 · chiusura da lettera: una riga, nessuna colonna, nessuna fila di icone. */
+.chiusura {
+  margin-top: var(--space-3xl);
+  padding-block: var(--space-lg) var(--space-2xl);
+  max-width: var(--measure);
+}
+
+.chiusura p { margin-bottom: var(--space-2xs); }
+
+/* ── Home · Letter ────────────────────────────────────────────────────────── */
+
+.lettera {
+  max-width: 50ch;
+  padding-block: var(--space-xl) var(--space-2xl);
+}
+
+.lettera .saluto {
+  font-family: var(--font-display);
+  max-width: none;
+  font-weight: var(--display-weight);
+  font-size: var(--text-xl);
+  line-height: 1.25;
+  letter-spacing: var(--tracking-display);
+  margin-bottom: var(--space-md);
+  text-wrap: balance;
+}
+
+.lettera p { font-size: var(--text-md); line-height: var(--lh-relaxed); }
+.lettera p:last-of-type { margin-bottom: 0; }
+
+/* L'elenco delle proposte: titoli, non righe di tabella. Niente numero in
+   colonna a sinistra, niente filetti, niente griglia a cinque colonne. */
+.proposte-intro { margin-bottom: var(--space-lg); }
+
+.proposte {
+  padding-block: 0;
+  display: grid;
+  gap: var(--space-xl);
+  max-width: 58rem;
+}
+
+.proposta { display: block; max-width: 34rem; }
+
+.proposta h2 {
+  font-size: var(--text-lg);
+  font-weight: 560;
+  margin-bottom: var(--space-3xs);
+}
+
+.proposta:hover h2 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
+
+.vuoto { color: var(--color-muted); }
+
+/* ── Scheda · Photographic ────────────────────────────────────────────────── */
+
+/* La fotografia arriva prima del titolo e occupa la larghezza intera: e' il
+   motivo per cui la gente guarda queste proposte. */
+/* Sul telefono la fotografia tocca i bordi: il suo margine è il margine della
+   pagina, e il bordo dell'immagine fa da divisore al posto di un filetto. */
+.lastra {
+  margin-block: 0 var(--space-md);
+  margin-inline: calc(var(--gutter) * -1);
+  background: var(--color-paper-2);
+}
+
+@media (min-width: 48rem) {
+  .lastra { margin-inline: 0; }
+}
+
+.lastra img { width: 100%; }
+
+/* ── Tavola annotata ──────────────────────────────────────────────────────────
+ * La vista di progetto smette di essere un'immagine e diventa una tavola: i
+ * segni stanno sui punti, le voci dicono cosa fa ognuno e perché serve. Sotto i
+ * 64rem le voci scendono in elenco sotto la figura e sull'immagine restano solo
+ * i numeri: le etichette non stanno in 375px senza coprire il disegno.
+ * La classe "disegnata" sulla figura accende il trattamento a disegno. */
+
+.annotata { position: relative; }
+
+.tavola { position: relative; display: block; }
+.tavola img { display: block; width: 100%; }
+
+/* Bianco e nero, il costruito imbiancato, molto contrasto e poco dettaglio. */
+.annotata.disegnata .tavola img { filter: grayscale(1) brightness(1.1) contrast(1.5); }
+
+/* Il filo che porta dalla voce al punto: uno chiaro sotto, uno d'inchiostro
+   sopra, così si legge tanto sul cielo quanto sulla pietra. */
+.richiami { display: none; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.richiami line { vector-effect: non-scaling-stroke; }
+.richiami .alone { stroke: var(--color-paper); stroke-width: 3.5; opacity: 0.85; }
+.richiami .filo  { stroke: var(--color-ink);  stroke-width: 1; }
+
+.segni { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; pointer-events: none; }
+
+.segno, .voce .n {
+  display: grid;
+  place-items: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  background: var(--color-paper);
+  border: 1px solid var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 560;
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+.segno {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate(-50%, -50%);
+}
+
+/* Elenco sotto la figura: è la forma di base, quella del telefono. */
+.annotazioni {
+  margin: var(--space-md) 0 0;
+  padding-inline: var(--gutter);
+  list-style: none;
+  display: grid;
+  gap: var(--space-md);
+  max-width: 44rem;
+}
+
+@media (min-width: 48rem) {
+  .annotazioni { padding-inline: 0; }
+}
+
+.voce {
+  display: grid;
+  grid-template-columns: 1.55rem 1fr;
+  column-gap: var(--space-xs);
+  row-gap: var(--space-3xs);
+  align-items: start;
+}
+
+.voce .n { grid-column: 1; grid-row: 1; }
+
+.voce .titolo {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  font-family: var(--font-display);
+  font-weight: 560;
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink);
+}
+
+.voce p {
+  grid-column: 2;
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--lh-normal);
+  color: var(--color-ink-2);
+}
+
+/* Da 64rem in su c'è spazio: le voci salgono sull'immagine, al loro posto. */
+@media (min-width: 64rem) {
+  .richiami { display: block; }
+
+  .annotazioni {
+    position: absolute;
+    inset: 0;
+    display: block;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+  }
+
+  .annotazioni li {
+    position: absolute;
+    left: var(--lx);
+    top: var(--ly);
+    width: var(--lw);
+    background: var(--color-paper);
+    padding: var(--space-2xs) var(--space-xs) var(--space-xs);
+  }
+
+  .voce p { font-size: var(--text-xs); line-height: 1.45; }
+}
+
+.didascalia {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs) var(--space-sm);
+  max-width: 44rem;
+  margin-bottom: var(--space-2xl);
+}
+
+.scheda-testo { padding-block: var(--space-md) 0; }
+.scheda-testo h1 { margin-bottom: var(--space-md); max-width: 18ch; }
+
+.occhiello {
+  font-size: var(--text-md);
+  line-height: var(--lh-normal);
+  margin-bottom: var(--space-lg);
+  max-width: 48ch;
+}
+
+.corpo-testo { max-width: var(--measure); }
+.corpo-testo p { font-size: var(--text-base); }
+.corpo-testo > :last-child { margin-bottom: 0; }
+
+/* Il colophon ha sostituito il cartiglio incorniciato: gli stessi dati, in una
+   riga di testo, senza fingere un documento tecnico. */
+.colophon {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-md);
+  border-top: var(--rule-hair) solid var(--color-rule);
+  max-width: 44rem;
+  display: grid;
+  gap: var(--space-2xs);
+}
+
+.colophon .dati { display: flex; flex-wrap: wrap; gap: var(--space-3xs) var(--space-sm); }
+
+/* Confronto trascinabile — resta perché racconta il contenuto. */
+.confronto { position: relative; }
+.confronto .lastre { position: relative; overflow: hidden; background: var(--color-paper-2); }
+.confronto .lastre img { width: 100%; }
+.confronto .dopo { position: absolute; inset: 0; clip-path: inset(0 0 0 var(--p, 50%)); }
+.confronto .dopo img { width: 100%; height: 100%; object-fit: cover; }
+
+.confronto .taglio {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: var(--p, 50%);
+  width: 2px;
+  margin-left: -1px;
+  background: var(--color-paper);
+  pointer-events: none;
+}
+
+.confronto input[type='range'] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+.confronto input[type='range']::-webkit-slider-thumb { -webkit-appearance: none; width: 44px; height: 100%; }
+.confronto input[type='range']::-moz-range-thumb { width: 44px; height: 100%; border: 0; background: transparent; }
+.confronto input[type='range']:active { cursor: grabbing; }
+.confronto input[type='range']:disabled { cursor: not-allowed; opacity: 0.55; }
+
+.confronto .etichette {
+  position: absolute;
+  inset: auto var(--space-sm) var(--space-sm) var(--space-sm);
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.confronto .etichette span {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  padding: var(--space-3xs) var(--space-2xs);
+}
+
+/* ── Note · Long Document ─────────────────────────────────────────────────── */
+
+.documento {
+  max-width: var(--measure);
+  padding-block: var(--space-xl) 0;
+}
+
+.documento h1 { margin-bottom: var(--space-lg); }
+.documento h2 { font-size: var(--text-lg); font-weight: 560; margin: var(--space-xl) 0 var(--space-2xs); }
+.documento > p:first-of-type { font-size: var(--text-md); }
+
+.prova {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-md);
+  border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+/* ── Movimento ────────────────────────────────────────────────────────────── */
+
+/* Nessuna entrata animata, in nessuna pagina. La pagina è già lì quando arrivi. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

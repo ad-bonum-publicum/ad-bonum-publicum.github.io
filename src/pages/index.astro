@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+/* Dalla più recente: il numero della proposta è anche il suo ordine. */
+const proposte = (await getCollection('proposte')).sort((a, b) => b.data.numero - a.data.numero);
+---
+
+<Base
+  titolo="Proposte per Pisticci"
+  descrizione="Le proposte di Franco Di Benedetto per Pisticci. Idee personali: nessuna commissionata, nessuna approvata da un’amministrazione."
+>
+  <section class="lettera">
+    <h1 class="saluto">Salve, sono Franco Di Benedetto, imprenditore, pensatore e filantropo.</h1>
+    <p>
+      Vivo a Pisticci e da anni immagino come potrebbe essere migliore. Negli ultimi mesi ho
+      deciso di condividere alcuni dei miei sogni e delle mie idee di vedere Pisticci rinascere
+      in una nuova e ritrovata bellezza.
+    </p>
+    <p>
+      Ogni proposta che trovate qui è mia: nessuna mi è stata commissionata &ldquo;ad arte&rdquo;,
+      e nessuna è stata approvata da un&rsquo;amministrazione, che magari, vedendo alcune mie
+      idee, possa prendere qualche spunto.
+    </p>
+    <p>
+      Le raccolgo in questo archivio dopo averle condivise sui social, perché alla fine su
+      Facebook si perdono tra un post e l&rsquo;altro.
+    </p>
+  </section>
+
+  <p class="nota proposte-intro">Le proposte, dalla più recente.</p>
+
+  <section class="proposte">
+    {
+      proposte.map((proposta) => (
+        <a class="proposta nudo" href={`/proposte/${proposta.id}/`}>
+          <h2>{proposta.data.titolo}</h2>
+          <p class="nota">
+            {proposta.data.luogo}
+            {proposta.data.dataBreve ? ` · ${proposta.data.dataBreve}` : ''}
+          </p>
+        </a>
+      ))
+    }
+  </section>
+</Base>

@@ -1,0 +1,74 @@
+---
+/* La figura della scheda. Senza annotazioni è una lastra e basta; con le
+   annotazioni diventa una tavola: i segni stanno sui punti dell'immagine, le
+   voci dicono cosa fa ognuno. Sotto i 64rem il CSS fa scendere le voci in
+   elenco sotto la figura — stesso markup, nessuna duplicazione. */
+
+export interface Annotazione {
+  n: number;
+  titolo: string;
+  testo: string;
+  /* Il segno, in percentuale dell'immagine. */
+  x: number;
+  y: number;
+  /* La voce, quando sale sull'immagine da 64rem in su. */
+  lx: number;
+  ly: number;
+  lw: number;
+  /* Il capo del filo che parte dalla voce e arriva al segno. */
+  filo: { x1: number; y1: number };
+}
+
+interface Props {
+  immagine: string;
+  alt: string;
+  larghezza: number;
+  altezza: number;
+  /* Accende il trattamento a disegno: bianco e nero, molto contrasto. */
+  disegnata?: boolean;
+  annotazioni?: Annotazione[];
+}
+
+const { immagine, alt, larghezza, altezza, disegnata = false, annotazioni = [] } = Astro.props;
+---
+
+{
+  annotazioni.length === 0 ? (
+    <figure class="lastra">
+      <img src={immagine} width={larghezza} height={altezza} alt={alt} />
+    </figure>
+  ) : (
+    <figure class:list={['lastra', 'annotata', disegnata && 'disegnata']}>
+      <div class="tavola">
+        <img src={immagine} width={larghezza} height={altezza} alt={alt} />
+        <svg class="richiami" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <g class="alone">
+            {annotazioni.map((a) => <line x1={a.filo.x1} y1={a.filo.y1} x2={a.x} y2={a.y} />)}
+          </g>
+          <g class="filo">
+            {annotazioni.map((a) => <line x1={a.filo.x1} y1={a.filo.y1} x2={a.x} y2={a.y} />)}
+          </g>
+        </svg>
+        <ul class="segni" aria-hidden="true">
+          {annotazioni.map((a) => (
+            <li class="segno" style={`--x: ${a.x}%; --y: ${a.y}%`}>
+              {a.n}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <ol class="annotazioni">
+        {annotazioni.map((a) => (
+          <li style={`--lx: ${a.lx}%; --ly: ${a.ly}%; --lw: ${a.lw}%`}>
+            <div class="voce">
+              <b class="n">{a.n}</b>
+              <b class="titolo">{a.titolo}</b>
+              <p>{a.testo}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </figure>
+  )
+}
