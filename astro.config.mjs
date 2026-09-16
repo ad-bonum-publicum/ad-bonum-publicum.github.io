@@ -1,5 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-// Nessun dominio deciso: quando ce ne sarà uno va qui, in `site`.
-export default defineConfig({});
+export default defineConfig({
+  // Il sito dell'organizzazione ad-bonum-publicum su GitHub Pages. È una
+  // versione di prova: quando ci sarà un dominio vero, si cambia qui.
+  site: 'https://ad-bonum-publicum.github.io',
+});

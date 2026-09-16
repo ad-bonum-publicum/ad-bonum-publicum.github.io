@@ -49,4 +49,6 @@ npm run preview  # guarda dist/ come lo vedrà il browser
   Source Serif 4, sottoinsiemi latin e latin-ext.
 - **`noindex`** è in `src/layouts/Base.astro`, perché le note promettono che il sito non è
   indicizzato. Quando ci sarà un dominio e la decisione di pubblicare, si toglie di lì.
-- Non c'è ancora un host: in `astro.config.mjs` manca `site`, e va messo quando il dominio esiste.
+- **Pubblicato** su GitHub Pages da `.github/workflows/deploy.yml` a ogni push su `main`, all'indirizzo
+  <https://ad-bonum-publicum.github.io>. È una versione di prova: quando ci sarà un dominio vero,
+  si cambia `site` in `astro.config.mjs` e si aggiunge il dominio nelle impostazioni Pages.
